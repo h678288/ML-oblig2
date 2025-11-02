@@ -50,24 +50,12 @@ def predict_quality(
         sulphates: float,
         alcohol: float, 
         color: str) -> str:
-    """
-    Predicts the quality of a wine, given the chemical characteristics provided
-
-    Args:
-        alcohol (float): Alcohol content of the wine
-        volatile_acidity (float): Volatile acidity of the wine
-        density (float): Density of the wine
-        citric_acid (float): Citric acid content of the wine
-        color (str): Color of the wine, either 'red' or 'white'
-    
-    Returns: "High Quality" or "Low Quality"
-    """
 
     if color.lower() not in ['red', 'white']:
-        raise ValueError("Color must be either 'red' or 'white'")
+        return
     wine_color = 0 if color.lower() == 'red' else 1
 
-    feature_order = [
+    features = [
         'fixed acidity', 
         'volatile acidity', 
         'citric acid', 
@@ -97,7 +85,7 @@ def predict_quality(
         ]
     ]
 
-    input_data = pd.DataFrame(input_values, columns=feature_order)
+    input_data = pd.DataFrame(input_values, columns=features)
 
     features_scaled = scaler.transform(input_data)
     
@@ -107,7 +95,6 @@ def predict_quality(
 
 iface = gr.Interface(
     fn=predict_quality,
-    # Use the top-level class names instead of gr.inputs.
     inputs=[
         gr.Number(label="Fixed Acidity"),
         gr.Number(label="Volatile Acidity"),
@@ -121,8 +108,7 @@ iface = gr.Interface(
         gr.Number(label="Alcohol"),
         gr.Dropdown(choices=["red", "white"], label="Color")
     ],
-    # Use the top-level class names instead of gr.outputs.
-    outputs=gr.Label(num_top_classes=2, label="Predicted Quality"),
+    outputs=gr.Label(label="Predicted Quality"),
     title="Wine Quality Predictor",
     description="Predict the quality of wine based on its chemical characteristics."
 )
