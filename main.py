@@ -22,9 +22,6 @@ wine_data['quality'] = wine_data['quality'].apply(lambda x: 1 if x >= 7 else 0)
 
 X = wine_data.drop('quality', axis=1)
 
-correct_feature_order = X.columns.tolist()
-#print(correct_feature_order)
-
 y = wine_data['quality']
 
 # Train-Test Split, Scaling, SMOTE, and Model Training
